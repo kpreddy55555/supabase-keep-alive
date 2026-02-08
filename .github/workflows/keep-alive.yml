@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: Ping Supabase Project
         run: >
-          curl -I "https://ftbbqjmranyindlyahc.supabase.co"
+          curl -I "https://ftbbqjmranyindlyahc.supabase.co" 
           -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}"
           -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
