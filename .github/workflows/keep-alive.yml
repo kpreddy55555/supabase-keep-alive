@@ -1,16 +1,27 @@
 name: Keep Supabase Alive
-
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 8 */5 * *'
-
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase Project
-        run: >
-          curl -I "https://ftbbqjmranyindlyahc.supabase.co" 
-          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}"
-          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+      - name: Ping Project 1
+        run: |
+          curl -s -o /dev/null -w "Project 1: %{http_code}\n" \
+            "${{ secrets.SUPABASE_URL_1 }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_KEY_1 }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY_1 }}"
+      - name: Ping Project 2
+        run: |
+          curl -s -o /dev/null -w "Project 2: %{http_code}\n" \
+            "${{ secrets.SUPABASE_URL_2 }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_KEY_2 }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY_2 }}"
+      - name: Ping Project 3
+        run: |
+          curl -s -o /dev/null -w "Project 3: %{http_code}\n" \
+            "${{ secrets.SUPABASE_URL_3 }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_KEY_3 }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY_3 }}"
