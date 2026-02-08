@@ -9,19 +9,19 @@ jobs:
     steps:
       - name: Ping Project 1
         run: |
-          curl -s -o /dev/null -w "Project 1: %{http_code}\n" \
+          curl -s -o /dev/null -w "Project 1: %{https://ftbqbjmranyinydlyahc.supabase.co}\n" \
             "${{ secrets.SUPABASE_URL_1 }}/rest/v1/" \
             -H "apikey: ${{ secrets.SUPABASE_KEY_1 }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY_1 }}"
       - name: Ping Project 2
         run: |
-          curl -s -o /dev/null -w "Project 2: %{http_code}\n" \
+          curl -s -o /dev/null -w "Project 2: %{https://qjbljljezeqachmwjuyp.supabase.co}\n" \
             "${{ secrets.SUPABASE_URL_2 }}/rest/v1/" \
             -H "apikey: ${{ secrets.SUPABASE_KEY_2 }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY_2 }}"
       - name: Ping Project 3
         run: |
-          curl -s -o /dev/null -w "Project 3: %{http_code}\n" \
+          curl -s -o /dev/null -w "Project 3: %{https://ariwybzjjpvgjczsttiy.supabase.co}\n" \
             "${{ secrets.SUPABASE_URL_3 }}/rest/v1/" \
             -H "apikey: ${{ secrets.SUPABASE_KEY_3 }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY_3 }}"
