@@ -11,16 +11,16 @@ jobs:
         env:
           URL: ${{ secrets.SUPABASE_URL_1 }}
           KEY: ${{ secrets.SUPABASE_KEY_1 }}
-        run: curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}"
+        run: 'curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}"'
 
       - name: Ping Project 2
         env:
           URL: ${{ secrets.SUPABASE_URL_2 }}
           KEY: ${{ secrets.SUPABASE_KEY_2 }}
-        run: curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}"
+        run: 'curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}"'
 
       - name: Ping Project 3
         env:
           URL: ${{ secrets.SUPABASE_URL_3 }}
           KEY: ${{ secrets.SUPABASE_KEY_3 }}
-        run: curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}"
+        run: 'curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}"'
