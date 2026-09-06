@@ -3,27 +3,56 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 8 */5 * *'
+permissions:
+  contents: write
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Ping Project 1
         env:
           URL: ${{ secrets.SUPABASE_URL_1 }}
           KEY: ${{ secrets.SUPABASE_KEY_1 }}
-        run: 'curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}"'
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/some_table?select=id&limit=1" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}")
+          echo "Project 1 status: $code"
+          if [ "$code" -ge 400 ]; then exit 1; fi
+
       - name: Ping Project 2
         env:
           URL: ${{ secrets.SUPABASE_URL_2 }}
           KEY: ${{ secrets.SUPABASE_KEY_2 }}
-        run: 'curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}"'
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/some_table?select=id&limit=1" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}")
+          echo "Project 2 status: $code"
+          if [ "$code" -ge 400 ]; then exit 1; fi
+
       - name: Ping Project 3
         env:
           URL: ${{ secrets.SUPABASE_URL_3 }}
           KEY: ${{ secrets.SUPABASE_KEY_3 }}
-        run: 'curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}"'
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/some_table?select=id&limit=1" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}")
+          echo "Project 3 status: $code"
+          if [ "$code" -ge 400 ]; then exit 1; fi
+
       - name: Ping Project 4
         env:
           URL: ${{ secrets.SUPABASE_URL_4 }}
           KEY: ${{ secrets.SUPABASE_KEY_4 }}
-        run: 'curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}"'
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/some_table?select=id&limit=1" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}")
+          echo "Project 4 status: $code"
+          if [ "$code" -ge 400 ]; then exit 1; fi
+
+      - name: Keep repo active
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          date > last_run.txt
+          git add last_run.txt
+          git commit -m "Keep-alive ping $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "No changes to commit"
+          git push
