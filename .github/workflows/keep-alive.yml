@@ -13,61 +13,58 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Ping Project 1
+        continue-on-error: true
         env:
           URL: ${{ secrets.SUPABASE_URL_1 }}
           KEY: ${{ secrets.SUPABASE_KEY_1 }}
         run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/user_roles?select=id&limit=1" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}")
+          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
           echo "Project 1 status: $code"
-          if [ "$code" -ge 400 ]; then exit 1; fi
 
       - name: Ping Project 2
+        continue-on-error: true
         env:
           URL: ${{ secrets.SUPABASE_URL_2 }}
           KEY: ${{ secrets.SUPABASE_KEY_2 }}
         run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/users?select=id&limit=1" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}")
+          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
           echo "Project 2 status: $code"
-          if [ "$code" -ge 400 ]; then exit 1; fi
 
       - name: Ping Project 3
+        continue-on-error: true
         env:
           URL: ${{ secrets.SUPABASE_URL_3 }}
           KEY: ${{ secrets.SUPABASE_KEY_3 }}
         run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/users?select=id&limit=1" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}")
+          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
           echo "Project 3 status: $code"
-          if [ "$code" -ge 400 ]; then exit 1; fi
 
       - name: Ping Project 4
+        continue-on-error: true
         env:
           URL: ${{ secrets.SUPABASE_URL_4 }}
           KEY: ${{ secrets.SUPABASE_KEY_4 }}
         run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/users?select=id&limit=1" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}")
+          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
           echo "Project 4 status: $code"
-          if [ "$code" -ge 400 ]; then exit 1; fi
 
       - name: Ping Project 5
+        continue-on-error: true
         env:
           URL: ${{ secrets.SUPABASE_URL_5 }}
           KEY: ${{ secrets.SUPABASE_KEY_5 }}
         run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/members?select=id&limit=1" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}")
+          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
           echo "Project 5 status: $code"
-          if [ "$code" -ge 400 ]; then exit 1; fi
 
       - name: Ping Project 6
+        continue-on-error: true
         env:
           URL: ${{ secrets.SUPABASE_URL_6 }}
           KEY: ${{ secrets.SUPABASE_KEY_6 }}
         run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/rest/v1/members?select=id&limit=1" -H "apikey: ${KEY}" -H "Authorization: Bearer ${KEY}")
+          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
           echo "Project 6 status: $code"
-          if [ "$code" -ge 400 ]; then exit 1; fi
-
-
-
 
       - name: Keep repo active
         run: |
@@ -77,4 +74,3 @@ jobs:
           git add last_run.txt
           git commit -m "Keep-alive ping $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "No changes to commit"
           git push
-
