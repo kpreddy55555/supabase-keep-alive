@@ -12,61 +12,34 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v5
 
-      - name: Ping Project 1
-        continue-on-error: true
+      - name: Ping all projects
         env:
-          URL: ${{ secrets.SUPABASE_URL_1 }}
-          KEY: ${{ secrets.SUPABASE_KEY_1 }}
+          URL_1: ${{ secrets.SUPABASE_URL_1 }}
+          KEY_1: ${{ secrets.SUPABASE_KEY_1 }}
+          URL_2: ${{ secrets.SUPABASE_URL_2 }}
+          KEY_2: ${{ secrets.SUPABASE_KEY_2 }}
+          URL_3: ${{ secrets.SUPABASE_URL_3 }}
+          KEY_3: ${{ secrets.SUPABASE_KEY_3 }}
+          URL_4: ${{ secrets.SUPABASE_URL_4 }}
+          KEY_4: ${{ secrets.SUPABASE_KEY_4 }}
+          URL_5: ${{ secrets.SUPABASE_URL_5 }}
+          KEY_5: ${{ secrets.SUPABASE_KEY_5 }}
+          URL_6: ${{ secrets.SUPABASE_URL_6 }}
+          KEY_6: ${{ secrets.SUPABASE_KEY_6 }}
         run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
-          echo "Project 1 status: $code"
-
-      - name: Ping Project 2
-        continue-on-error: true
-        env:
-          URL: ${{ secrets.SUPABASE_URL_2 }}
-          KEY: ${{ secrets.SUPABASE_KEY_2 }}
-        run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
-          echo "Project 2 status: $code"
-
-      - name: Ping Project 3
-        continue-on-error: true
-        env:
-          URL: ${{ secrets.SUPABASE_URL_3 }}
-          KEY: ${{ secrets.SUPABASE_KEY_3 }}
-        run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
-          echo "Project 3 status: $code"
-
-      - name: Ping Project 4
-        continue-on-error: true
-        env:
-          URL: ${{ secrets.SUPABASE_URL_4 }}
-          KEY: ${{ secrets.SUPABASE_KEY_4 }}
-        run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
-          echo "Project 4 status: $code"
-
-      - name: Ping Project 5
-        continue-on-error: true
-        env:
-          URL: ${{ secrets.SUPABASE_URL_5 }}
-          KEY: ${{ secrets.SUPABASE_KEY_5 }}
-        run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
-          echo "Project 5 status: $code"
-
-      - name: Ping Project 6
-        continue-on-error: true
-        env:
-          URL: ${{ secrets.SUPABASE_URL_6 }}
-          KEY: ${{ secrets.SUPABASE_KEY_6 }}
-        run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" "${URL}/auth/v1/health" -H "apikey: ${KEY}")
-          echo "Project 6 status: $code"
+          fail=0
+          for i in 1 2 3 4 5 6; do
+            u="URL_$i"; k="KEY_$i"
+            code=$(curl -s -o /dev/null -w "%{http_code}" \
+              "${!u}/rest/v1/keepalive?select=id&limit=1" \
+              -H "apikey: ${!k}")
+            echo "Project $i: HTTP $code"
+            if [ "$code" != "200" ]; then fail=1; fi
+          done
+          exit $fail
 
       - name: Keep repo active
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
