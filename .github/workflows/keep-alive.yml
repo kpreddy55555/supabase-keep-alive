@@ -5,6 +5,10 @@ on:
     - cron: '0 8 */5 * *'
 permissions:
   contents: write
+concurrency:
+  group: keep-supabase-alive
+  cancel-in-progress: false
+  
 jobs:
   ping:
     runs-on: ubuntu-latest
@@ -30,9 +34,9 @@ jobs:
           fail=0
           for i in 1 2 3 4 5 6; do
             u="URL_$i"; k="KEY_$i"
-            code=$(curl -s -o /dev/null -w "%{http_code}" \
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 \
               "${!u}/rest/v1/keepalive?select=id&limit=1" \
-              -H "apikey: ${!k}")
+              -H "apikey: ${!k}") || true
             echo "Project $i: HTTP $code"
             if [ "$code" != "200" ]; then fail=1; fi
           done
@@ -43,6 +47,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git reset --hard origin/main
           date > last_run.txt
           git add last_run.txt
           git commit -m "Keep-alive ping $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "No changes to commit"
