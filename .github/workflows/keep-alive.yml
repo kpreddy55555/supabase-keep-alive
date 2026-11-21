@@ -8,7 +8,6 @@ permissions:
 concurrency:
   group: keep-supabase-alive
   cancel-in-progress: false
-  
 jobs:
   ping:
     runs-on: ubuntu-latest
