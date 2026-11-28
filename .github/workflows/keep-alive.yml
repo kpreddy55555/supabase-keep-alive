@@ -1,8 +1,9 @@
+
 name: Keep Supabase Alive
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 8 */5 * *'
+    - cron: '0 8 * * *'
 permissions:
   contents: write
 concurrency:
@@ -34,10 +35,11 @@ jobs:
           for i in 1 2 3 4 5 6; do
             u="URL_$i"; k="KEY_$i"
             code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 \
-              "${!u}/rest/v1/keepalive?select=id&limit=1" \
-              -H "apikey: ${!k}") || true
+              -X POST "${!u}/rest/v1/rpc/keepalive_touch" \
+              -H "apikey: ${!k}" \
+              -H "Content-Type: application/json" -d '{}') || true
             echo "Project $i: HTTP $code"
-            if [ "$code" != "200" ]; then fail=1; fi
+            if [ "$code" != "200" ] && [ "$code" != "204" ]; then fail=1; fi
           done
           exit $fail
 
